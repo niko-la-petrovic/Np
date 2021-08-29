@@ -79,6 +79,8 @@ namespace Np.Windows.Hooks
 
         private readonly Module executingModule;
 
+        private readonly IntPtr executingModuleHandle;
+
         ~HookManager()
         {
             ShouldThrow = false;
@@ -94,6 +96,15 @@ namespace Np.Windows.Hooks
             mouseHookProcedure = MouseHookProc;
             keyboardHookProcedure = KeyboardHookProc;
             this.executingModule = executingModule ?? throw new ArgumentNullException(nameof(executingModule));
+            executingModuleHandle = Marshal.GetHINSTANCE(executingModule);
+        }
+
+        public HookManager(IntPtr executingModuleHandle)
+        {
+            if (executingModuleHandle == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(executingModuleHandle));
+
+            this.executingModuleHandle = executingModuleHandle;
         }
 
         /// <summary>
@@ -113,24 +124,22 @@ namespace Np.Windows.Hooks
         /// <returns>True if hooked successfully, false otherwise.</returns>
         public bool SetMouseHook()
         {
+            if (mouseHookHandle != IntPtr.Zero)
+                return true;
+
+            mouseHookHandle = SetWindowsHook.SetWindowsHookEx(
+                HookId.WH_MOUSE_LL,
+                mouseHookProcedure,
+                executingModuleHandle,
+                0);
+
             if (mouseHookHandle == IntPtr.Zero)
             {
-                mouseHookHandle = SetWindowsHook.SetWindowsHookEx(
-                    HookId.WH_MOUSE_LL,
-                    mouseHookProcedure,
-                    Marshal.GetHINSTANCE(executingModule),
-                    0);
-
-                if (mouseHookHandle == IntPtr.Zero)
-                {
-                    LastErrorCode = Marshal.GetLastWin32Error();
-                    bool unhooked = UnhookMouseHook();
-                    if (unhooked && ShouldThrow)
-                        throw new Win32Exception(LastErrorCode);
-                    return false;
-                }
-
-                return true;
+                LastErrorCode = Marshal.GetLastWin32Error();
+                bool unhooked = UnhookMouseHook();
+                if (unhooked && ShouldThrow)
+                    throw new Win32Exception(LastErrorCode);
+                return false;
             }
 
             return true;
@@ -142,24 +151,22 @@ namespace Np.Windows.Hooks
         /// <returns>True if hooked successfully, false otherwise.</returns>
         public bool SetKeyboardHook()
         {
+            if (keyboardHookHandle != IntPtr.Zero)
+                return true;
+
+            keyboardHookHandle = SetWindowsHook.SetWindowsHookEx(
+                HookId.WH_KEYBOARD_LL,
+                keyboardHookProcedure,
+                executingModuleHandle,
+                0);
+
             if (keyboardHookHandle == IntPtr.Zero)
             {
-                keyboardHookHandle = SetWindowsHook.SetWindowsHookEx(
-                    HookId.WH_KEYBOARD_LL,
-                    keyboardHookProcedure,
-                    Marshal.GetHINSTANCE(executingModule),
-                    0);
-
-                if (keyboardHookHandle == IntPtr.Zero)
-                {
-                    LastErrorCode = Marshal.GetLastWin32Error();
-                    bool unhooked = UnhookKeyboardHook();
-                    if (!unhooked && ShouldThrow)
-                        throw new Win32Exception(LastErrorCode);
-                    return false;
-                }
-
-                return true;
+                LastErrorCode = Marshal.GetLastWin32Error();
+                bool unhooked = UnhookKeyboardHook();
+                if (!unhooked && ShouldThrow)
+                    throw new Win32Exception(LastErrorCode);
+                return false;
             }
 
             return true;
@@ -171,21 +178,19 @@ namespace Np.Windows.Hooks
         /// <returns>True if unhooked successfully, false otherwise.</returns>
         public bool UnhookMouseHook()
         {
-            if (mouseHookHandle != IntPtr.Zero)
+            if (mouseHookHandle == IntPtr.Zero)
+                return true;
+
+            bool hooked = UnhookWindowsHook.UnhookWindowsHookEx(mouseHookHandle);
+
+            mouseHookHandle = IntPtr.Zero;
+
+            if (!hooked && ShouldThrow)
             {
-                bool hooked = UnhookWindowsHook.UnhookWindowsHookEx(mouseHookHandle);
-
-                mouseHookHandle = IntPtr.Zero;
-
-                if (!hooked && ShouldThrow)
-                {
-                    LastErrorCode = Marshal.GetLastWin32Error();
-                    throw new Win32Exception(LastErrorCode);
-                }
-                return false;
+                LastErrorCode = Marshal.GetLastWin32Error();
+                throw new Win32Exception(LastErrorCode);
             }
-
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -194,21 +199,19 @@ namespace Np.Windows.Hooks
         /// <returns>True if unhooked successfully, false otherwise.</returns>
         public bool UnhookKeyboardHook()
         {
-            if (keyboardHookHandle != IntPtr.Zero)
+            if (keyboardHookHandle == IntPtr.Zero)
+                return true;
+
+            bool hooked = UnhookWindowsHook.UnhookWindowsHookEx(keyboardHookHandle);
+
+            keyboardHookHandle = IntPtr.Zero;
+
+            if (!hooked & ShouldThrow)
             {
-                bool hooked = UnhookWindowsHook.UnhookWindowsHookEx(keyboardHookHandle);
-
-                keyboardHookHandle = IntPtr.Zero;
-
-                if (!hooked & ShouldThrow)
-                {
-                    LastErrorCode = Marshal.GetLastWin32Error();
-                    throw new Win32Exception(LastErrorCode);
-                }
-                return false;
+                LastErrorCode = Marshal.GetLastWin32Error();
+                throw new Win32Exception(LastErrorCode);
             }
-
-            return true;
+            return false;
         }
 
         /// <summary>
