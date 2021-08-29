@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Np.Windows, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Np.Windows.1.0.0\lib\net472\Np.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -43,26 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Windows\DllImports\Ascii.cs" />
-    <Compile Include="Windows\DllImports\CallNextHook.cs" />
-    <Compile Include="Windows\DllImports\Dlls.cs" />
-    <Compile Include="Windows\DllImports\HookProc.cs" />
-    <Compile Include="Windows\DllImports\KeyboardState.cs" />
-    <Compile Include="Windows\DllImports\KeyState.cs" />
-    <Compile Include="Windows\DllImports\MouseEvent.cs" />
-    <Compile Include="Windows\DllImports\SetWindowsHook.cs" />
-    <Compile Include="Windows\DllImports\UnhookWindowsHook.cs" />
     <Compile Include="Windows\Hooks\HookManager.cs" />
-    <Compile Include="Windows\Structures\HookId.cs" />
-    <Compile Include="Windows\Structures\KeyboardLLHookStruct.cs" />
-    <Compile Include="Windows\Structures\MouseHookStruct.cs" />
-    <Compile Include="Windows\Structures\MouseLLHookStruct.cs" />
-    <Compile Include="Windows\Structures\Point.cs" />
-    <Compile Include="Windows\Structures\VirtualKeyState.cs" />
-    <Compile Include="Windows\Structures\WindowsMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LICENSE.txt" />
+    <None Include="LICENSE" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
