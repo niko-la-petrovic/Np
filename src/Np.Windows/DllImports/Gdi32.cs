@@ -11,7 +11,7 @@ namespace Np.Windows.DllImports
     /// <summary>
     /// GDI32-related imports.
     /// </summary>
-    public static class Gdi32
+    public class Gdi32
     {
         // TODO
         /// <summary></summary>
