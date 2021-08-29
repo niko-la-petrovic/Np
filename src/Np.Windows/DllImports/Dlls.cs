@@ -12,5 +12,6 @@ namespace Np.Windows.DllImports
     public static class Dlls
     {
         public const string User32 = "user32.dll";
+        public const string Gdi32 = "gdi32.dll";
     }
 }

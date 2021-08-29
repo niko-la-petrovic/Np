@@ -44,7 +44,10 @@
   <ItemGroup>
     <Compile Include="DllImports\Ascii.cs" />
     <Compile Include="DllImports\CallNextHook.cs" />
+    <Compile Include="DllImports\Window.cs" />
+    <Compile Include="DllImports\DeviceContext.cs" />
     <Compile Include="DllImports\Dlls.cs" />
+    <Compile Include="DllImports\Gdi32.cs" />
     <Compile Include="DllImports\HookProc.cs" />
     <Compile Include="DllImports\KeyboardState.cs" />
     <Compile Include="DllImports\KeyState.cs" />
@@ -57,6 +60,8 @@
     <Compile Include="Structures\MouseHookStruct.cs" />
     <Compile Include="Structures\MouseLLHookStruct.cs" />
     <Compile Include="Structures\Point.cs" />
+    <Compile Include="Structures\Rect.cs" />
+    <Compile Include="Structures\TernaryRasterOperations.cs" />
     <Compile Include="Structures\VirtualKeyState.cs" />
     <Compile Include="Structures\WindowsMessage.cs" />
   </ItemGroup>
