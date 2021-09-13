@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Np.Windows.Hooks", "Np.Wind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Np.Windows", "Np.Windows\Np.Windows.csproj", "{8C9B5E0B-AFDA-42F5-B5E4-DBF7C6385115}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Np.AspNetCore.Authorization", "Np.AspNetCore.Authorization\Np.AspNetCore.Authorization.csproj", "{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{8C9B5E0B-AFDA-42F5-B5E4-DBF7C6385115}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C9B5E0B-AFDA-42F5-B5E4-DBF7C6385115}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C9B5E0B-AFDA-42F5-B5E4-DBF7C6385115}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
