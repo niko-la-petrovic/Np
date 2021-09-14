@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Np.Windows.Structs
+namespace Np.Windows.Structures
 {
     /// <summary>
     /// Winuser.h KBDLLHOOKSTRUCT structure.

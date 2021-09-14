@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Np.Windows.Structs
+namespace Np.Windows.Structures
 {
     /// <summary>
     /// Winuser.h MOUSEHOOKSTRUCT structure.

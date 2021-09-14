@@ -10,6 +10,7 @@
     <RootNamespace>Np.Windows</RootNamespace>
     <AssemblyName>Np.Windows</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
@@ -33,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,6 +56,7 @@
     <Compile Include="DllImports\MouseEvent.cs" />
     <Compile Include="DllImports\SetWindowsHook.cs" />
     <Compile Include="DllImports\UnhookWindowsHook.cs" />
+    <Compile Include="Imaging\WindowCapture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structures\HookId.cs" />
     <Compile Include="Structures\KeyboardLLHookStruct.cs" />

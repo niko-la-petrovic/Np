@@ -3,9 +3,8 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Windows.Forms;
 using System.ComponentModel;
-using Np.Windows.Structs;
-using Np.Windows.DllImports;
 using Np.Windows.Structures;
+using Np.Windows.DllImports;
 using System.Collections.Generic;
 
 namespace Np.Windows.Hooks
