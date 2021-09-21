@@ -9,6 +9,8 @@ using System.Text;
 
 namespace Np.AspNetCore.Authorization.OpenApi.OperationFilters
 {
+    // TODO accept list of OpenApiSecurityRequirements
+
     /// <summary>
     /// Swagger Generator filter for authorized methods
     /// </summary>
