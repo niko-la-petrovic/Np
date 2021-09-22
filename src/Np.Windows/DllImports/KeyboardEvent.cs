@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 
 namespace Np.Windows.DllImports
 {
-    public class MouseEvent
+
+    public class KeyboardEvent
     {
         // TODO import SendInput as well https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput
-        /// <remarks>https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mouse_event</remarks>
+        /// <remarks>https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-keybd_event</remarks>
         [DllImport(Dlls.User32, CharSet = CharSet.Auto,
             CallingConvention = CallingConvention.StdCall)]
-        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
-        public enum MouseEventFlags : uint
+        public enum KeyboardEventFlags : uint
         {
-            MOUSEEVENTF_LEFTDOWN = 0x02,
-            MOUSEEVENTF_LEFTUP = 0x04,
-            MOUSEEVENTF_RIGHTDOWN = 0x08,
-            MOUSEEVENTF_RIGHTUP = 0x10
+            KEYEVENTF_EXTENDEDKEY = 0x0001,
+            KEYEVENTF_KEYUP = 0x0002
         }
     }
 }

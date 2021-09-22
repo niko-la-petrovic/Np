@@ -292,6 +292,8 @@ namespace Np.Windows.Hooks
         /// </summary>
         protected int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
+            // TODO modify the structure referenced by lParam so that its two lowest bits are 0 (removing the LLMHF_INJECTED and LLMHF_LOWER_IL_INJECTED bits)
+
             if (nCode < 0 || (KeyDown == null && KeyUp == null && KeyPress == null))
                 return CallNextHook.CallNextHookEx(keyboardHookHandle, nCode, wParam, lParam);
 

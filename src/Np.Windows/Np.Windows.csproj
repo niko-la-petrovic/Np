@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="DllImports\Ascii.cs" />
     <Compile Include="DllImports\CallNextHook.cs" />
+    <Compile Include="DllImports\KeyboardEvent.cs" />
     <Compile Include="DllImports\Window.cs" />
     <Compile Include="DllImports\DeviceContext.cs" />
     <Compile Include="DllImports\Dlls.cs" />
