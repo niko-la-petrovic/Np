@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Np.Windows.Hooks", "Np.Wind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Np.Windows", "Np.Windows\Np.Windows.csproj", "{8C9B5E0B-AFDA-42F5-B5E4-DBF7C6385115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Np.AspNetCore.Authorization", "Np.AspNetCore.Authorization\Np.AspNetCore.Authorization.csproj", "{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Np.AspNetCore.Authorization", "Np.AspNetCore.Authorization\Np.AspNetCore.Authorization.csproj", "{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Np.Youtube", "Np.Youtube\Np.Youtube.csproj", "{8CB5CD4E-7024-4CA9-8BD1-DF8511CBF1C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF6981A9-5076-4817-86A7-A0BDCCD8E5D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CB5CD4E-7024-4CA9-8BD1-DF8511CBF1C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB5CD4E-7024-4CA9-8BD1-DF8511CBF1C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB5CD4E-7024-4CA9-8BD1-DF8511CBF1C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB5CD4E-7024-4CA9-8BD1-DF8511CBF1C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
