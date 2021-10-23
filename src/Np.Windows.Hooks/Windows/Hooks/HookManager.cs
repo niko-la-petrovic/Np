@@ -57,6 +57,13 @@ namespace Np.Windows.Hooks
             = new List<WindowsMessage> { WindowsMessage.KEYDOWN, WindowsMessage.SYSKEYDOWN, WindowsMessage.SYSKEYUP };
 
         /// <summary>
+        /// Dereferences the lParam pointer as a corresponding struct and unsets the flags field if it indicates an event from
+        /// an process.
+        /// </summary>
+        /// <value>True by default.</value>
+        public bool UnsetInjectedFlag { get; set; } = false;
+
+        /// <summary>
         /// Handle of the mouse hook procedure.
         /// </summary>
         private IntPtr mouseHookHandle = IntPtr.Zero;
@@ -226,19 +233,31 @@ namespace Np.Windows.Hooks
 
             return false;
         }
-
+        
         /// <summary>
         /// Default mouse hook procedure to use.
         /// </summary>
         protected int MouseHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
+            MouseLLHookStruct mouseHookStruct = Marshal.PtrToStructure<MouseLLHookStruct>(lParam);
+            if(UnsetInjectedFlag){
+                unsafe
+                {
+                    MouseLLHookStruct* ptrMouseHookStruct = (MouseLLHookStruct*)lParam;
+                    if (mouseHookStruct.flags == (uint)KeyboardLLHookStructFlags.LLKHF_INJECTED
+                         || mouseHookStruct.flags == (uint)KeyboardLLHookStructFlags.LLKHF_LOWER_IL_INJECTED)
+                    {
+                        ptrMouseHookStruct->flags = 0;
+                    }
+                }
+            }
+
             if (nCode < 0 || MouseAction == null)
                 return CallNextHook.CallNextHookEx(mouseHookHandle, nCode, wParam, lParam);
 
             WindowsMessage message = (WindowsMessage)wParam;
             MouseButtons button = MouseButtons.None;
             short delta = 0;
-            MouseLLHookStruct mouseHookStruct = Marshal.PtrToStructure<MouseLLHookStruct>(lParam);
             short highWord = (short)((mouseHookStruct.mouseData >> 16) & 0xffff);
 
             string messageString = message.ToString();
@@ -292,19 +311,30 @@ namespace Np.Windows.Hooks
         /// </summary>
         protected int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            // TODO modify the structure referenced by lParam so that its two lowest bits are 0 (removing the LLMHF_INJECTED and LLMHF_LOWER_IL_INJECTED bits)
+            KeyboardLLHookStruct keyboardHookStruct = Marshal.PtrToStructure<KeyboardLLHookStruct>(lParam);
+            if (UnsetInjectedFlag)
+            {
+                unsafe
+                {
+                    KeyboardLLHookStruct* ptrKeyboardHookStruct = (KeyboardLLHookStruct*)lParam;
+                    if (keyboardHookStruct.flags == (uint)KeyboardLLHookStructFlags.LLKHF_INJECTED
+                         || keyboardHookStruct.flags == (uint)KeyboardLLHookStructFlags.LLKHF_LOWER_IL_INJECTED)
+                    {
+                        ptrKeyboardHookStruct->flags = 0;
+                    }
+                }
+            }
 
             if (nCode < 0 || (KeyDown == null && KeyUp == null && KeyPress == null))
                 return CallNextHook.CallNextHookEx(keyboardHookHandle, nCode, wParam, lParam);
 
             WindowsMessage message = (WindowsMessage)wParam;
             bool handled = false;
-            KeyboardLLHookStruct MyKeyboardHookStruct = Marshal.PtrToStructure<KeyboardLLHookStruct>(lParam);
 
             if (KeyDown != null && (message == WindowsMessage.KEYDOWN
                 || message == WindowsMessage.SYSKEYDOWN))
             {
-                KeyEventArgs e = new KeyEventArgs(MyKeyboardHookStruct.vkCode);
+                KeyEventArgs e = new KeyEventArgs(keyboardHookStruct.vkCode);
                 KeyDown(this, e);
                 handled = handled || e.Handled;
             }
@@ -318,11 +348,11 @@ namespace Np.Windows.Hooks
                 KeyboardState.GetKeyboardState(keyState);
                 byte[] inBuffer = new byte[2];
                 if (Ascii.ToAscii(
-                    MyKeyboardHookStruct.vkCode,
-                    MyKeyboardHookStruct.scanCode,
+                    keyboardHookStruct.vkCode,
+                    keyboardHookStruct.scanCode,
                     keyState,
                     inBuffer,
-                    MyKeyboardHookStruct.flags) == 1)
+                    keyboardHookStruct.flags) == 1)
                 {
                     char key = (char)inBuffer[0];
                     if ((capsLockActive ^ shiftActive) && char.IsLetter(key))
@@ -336,7 +366,7 @@ namespace Np.Windows.Hooks
             if (KeyUp != null && (message == WindowsMessage.KEYUP
                 || message == WindowsMessage.SYSKEYUP))
             {
-                KeyEventArgs e = new KeyEventArgs(MyKeyboardHookStruct.vkCode);
+                KeyEventArgs e = new KeyEventArgs(keyboardHookStruct.vkCode);
                 KeyUp(this, e);
                 handled = handled || e.Handled;
             }
