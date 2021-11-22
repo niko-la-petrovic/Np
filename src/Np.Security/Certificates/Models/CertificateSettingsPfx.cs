@@ -1,5 +1,6 @@
 ﻿using Np.Security.Certificates.Enums;
 using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
@@ -13,6 +14,7 @@ namespace Np.Security.Models
 
         public string FilePath { get; set; }
         public string Password { get; set; }
+        public string PasswordFilePath { get; set; }
 
         public override X509Certificate2 Certificate
         {
@@ -20,9 +22,13 @@ namespace Np.Security.Models
             {
                 if (certificate == null)
                 {
+                    string password = Password;
                     try
                     {
-                        var cert = new X509Certificate2(FilePath, Password);
+                        if (!string.IsNullOrWhiteSpace(PasswordFilePath))
+                            password = File.ReadAllText(PasswordFilePath);
+
+                        var cert = new X509Certificate2(FilePath, password);
                         certificate = cert;
                     }
                     catch (CryptographicException ex)
