@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,5 +21,14 @@ namespace Np.AspNetCore.Authorization.OpenApi.Swagger.Configuration
         /// URI to license.
         /// </summary>
         public string Uri { get; set; }
+
+        /// <summary>
+        /// The equivalent OpenAPI license.
+        /// </summary>
+        public OpenApiLicense OpenApiLicense => new OpenApiLicense
+        {
+            Name = Name,
+            Url = new Uri(Uri)
+        };
     }
 }

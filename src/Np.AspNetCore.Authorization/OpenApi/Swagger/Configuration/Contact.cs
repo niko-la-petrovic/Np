@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,5 +26,15 @@ namespace Np.AspNetCore.Authorization.OpenApi.Swagger.Configuration
         /// Related contact URI.
         /// </summary>
         public string Uri { get; set; }
+
+        /// <summary>
+        /// The equivalent OpenAPI contact.
+        /// </summary>
+        public OpenApiContact OpenApiContact => new OpenApiContact
+        {
+            Name = Name,
+            Email = Email,
+            Url = new Uri(Uri)
+        };
     }
 }
