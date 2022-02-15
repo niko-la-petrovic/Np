@@ -233,14 +233,15 @@ namespace Np.Windows.Hooks
 
             return false;
         }
-        
+
         /// <summary>
         /// Default mouse hook procedure to use.
         /// </summary>
         protected int MouseHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
             MouseLLHookStruct mouseHookStruct = Marshal.PtrToStructure<MouseLLHookStruct>(lParam);
-            if(UnsetInjectedFlag){
+            if (UnsetInjectedFlag)
+            {
                 unsafe
                 {
                     MouseLLHookStruct* ptrMouseHookStruct = (MouseLLHookStruct*)lParam;
@@ -306,6 +307,12 @@ namespace Np.Windows.Hooks
             return CallNextHook.CallNextHookEx(mouseHookHandle, nCode, wParam, lParam);
         }
 
+        private static void AddVirtualKeyCodeIfActive(ref Keys keys, bool active, Keys vkCode)
+        {
+            if (active)
+                keys |= vkCode;
+        }
+
         /// <summary>
         /// Default keyboard hook procedure to use.
         /// </summary>
@@ -330,25 +337,34 @@ namespace Np.Windows.Hooks
 
             WindowsMessage message = (WindowsMessage)wParam;
             bool handled = false;
+            Keys vkCode = keyboardHookStruct.vkCode;
+
+            bool shiftActive = (KeyState.GetKeyState(VirtualKeyState.VK_SHIFT) & 0x80) == 0x80;
+            bool controlActive = (KeyState.GetKeyState(VirtualKeyState.VK_CONTROL) & 0x80) == 0x80;
+            bool altActive = (KeyState.GetKeyState(VirtualKeyState.VK_MENU) & 0x80) == 0x80;
+            bool capsLockActive = (KeyState.GetKeyState(VirtualKeyState.VK_CAPITAL) & 0x1) == 0x1;
+
+            AddVirtualKeyCodeIfActive(ref vkCode, shiftActive, Keys.Shift);
+            AddVirtualKeyCodeIfActive(ref vkCode, altActive, Keys.Alt);
+            AddVirtualKeyCodeIfActive(ref vkCode, controlActive, Keys.Control);
+            AddVirtualKeyCodeIfActive(ref vkCode, capsLockActive, Keys.CapsLock);
+
+            KeyEventArgs e = new KeyEventArgs(vkCode);
 
             if (KeyDown != null && (message == WindowsMessage.KEYDOWN
                 || message == WindowsMessage.SYSKEYDOWN))
             {
-                KeyEventArgs e = new KeyEventArgs(keyboardHookStruct.vkCode);
                 KeyDown(this, e);
-                handled = handled || e.Handled;
+                handled |= e.Handled;
             }
 
             if (KeyPress != null && message == WindowsMessage.KEYDOWN)
             {
-                bool shiftActive = (KeyState.GetKeyState(VirtualKeyState.VK_SHIFT) & 0x80) == 0x80;
-                bool capsLockActive = (KeyState.GetKeyState(VirtualKeyState.VK_CAPITAL) & 0x1) == 0x1;
-
                 byte[] keyState = new byte[256];
                 KeyboardState.GetKeyboardState(keyState);
                 byte[] inBuffer = new byte[2];
                 if (Ascii.ToAscii(
-                    keyboardHookStruct.vkCode,
+                    vkCode,
                     keyboardHookStruct.scanCode,
                     keyState,
                     inBuffer,
@@ -357,18 +373,17 @@ namespace Np.Windows.Hooks
                     char key = (char)inBuffer[0];
                     if ((capsLockActive ^ shiftActive) && char.IsLetter(key))
                         key = char.ToUpper(key);
-                    KeyPressEventArgs e = new KeyPressEventArgs(key);
-                    KeyPress(this, e);
-                    handled = handled || e.Handled;
+                    var pressedKey = new KeyPressEventArgs(key);
+                    KeyPress(this, pressedKey);
+                    handled |= e.Handled;
                 }
             }
 
             if (KeyUp != null && (message == WindowsMessage.KEYUP
                 || message == WindowsMessage.SYSKEYUP))
             {
-                KeyEventArgs e = new KeyEventArgs(keyboardHookStruct.vkCode);
                 KeyUp(this, e);
-                handled = handled || e.Handled;
+                handled |= e.Handled;
             }
 
             // TODO reconsider this part
